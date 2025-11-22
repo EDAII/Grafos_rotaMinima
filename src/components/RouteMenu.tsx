@@ -21,7 +21,7 @@ export default function RouteMenu({
   const isValid = origin && destination;
 
   return (
-    <div className="w-80 bg-white shadow-2xl h-screen p-7 flex flex-col">
+    <div className="w-100 bg-white shadow-2xl h-screen p-7 flex flex-col">
       <h2 className="text-2xl font-bold text-gray-800 mb-8 flex items-center gap-3">
         <MapPin className="w-7 h-7 text-blue-600" />
         Busca de Rota
