@@ -7,6 +7,7 @@ import {
 } from "react-leaflet";
 import { cities } from "../utils/cities";
 import "leaflet/dist/leaflet.css";
+import { routes } from "../utils/routes";
 
 function Map({ route }: { route: [number, number][] }) {
   return (
@@ -48,6 +49,16 @@ function Map({ route }: { route: [number, number][] }) {
             opacity={0.8}
           />
         )}
+        {routes.map((route) => {
+          return (
+            <Polyline
+              positions={route}
+              color="black"
+              weight={1}
+              opacity={0.2}
+            />
+          );
+        })}
       </MapContainer>
     </div>
   );
