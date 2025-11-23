@@ -1,73 +1,52 @@
-# React + TypeScript + Vite
+# Rota Mínima
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Link do vídeo do Trabalho 4:**
 
-Currently, two official plugins are available:
+<!-- [Vídeo Trabalho 4 - EDAII]() Adicionar link -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Alunos
 
-## React Compiler
+| Matrícula  | Nome                         |
+| ---------- | ---------------------------- |
+| 21/1062446 | Renan Araújo de Souza        |
+| 21/1062080 | Leandro Almeida Rocha Santos |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Descrição do projeto
 
-## Expanding the ESLint configuration
+Este projeto foca na visualização e cálculo do menor caminho entre cidades do DF utilizando a biblioteca Leaflet para mapas e o algoritmo BFS.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Guia de instalação
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Dependências do projeto
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**Linguagem**: Typescript<br>
+**Framework**: React, Nodev22
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Como executar o projeto
+
+```
+git clone https://github.com/EDAII/Grafos_rotaMinima.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+npm install
+```
+
+```
+npm run dev
+```
+
+## Capturas de tela
+
+<img width="1909" height="953" alt="image" src="https://github.com/user-attachments/assets/42e72723-2e5a-481e-be70-4590d1df0573" />
+<img width="1912" height="952" alt="image" src="https://github.com/user-attachments/assets/e02cabb9-7eeb-4157-b9ce-456e8d52762c" />
+<img width="1912" height="956" alt="image" src="https://github.com/user-attachments/assets/43c42bf4-3cbf-470e-8aa2-ae9023934b37" />
+<img width="1914" height="954" alt="image" src="https://github.com/user-attachments/assets/b36510e2-5dbf-4d20-9fac-a93650ef2310" />
+
+## Conclusões
+
+Observou-se ao longo do desenvolvimento do trabalho que, embora a BFS encontre o caminho com menor número de arestas em um grafo, isso não corresponde necessariamente às menores distâncias reais. Um trajeto considerado “menor” pela BFS pode, na prática, resultar em um percurso maior em quilômetros do que outro caminho que passa por mais nós.
+
+## Referências
+
+- BFS: https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/
