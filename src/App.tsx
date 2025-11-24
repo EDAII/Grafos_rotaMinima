@@ -1,44 +1,94 @@
 import { useRef, useState } from "react";
 import Map from "./components/Map";
 import RouteMenu from "./components/RouteMenu";
-import { findShortestPath, pathToCoordinates } from "./utils/graph";
+import { findShortestPathWithTracing } from "./utils/graph";
 import L from "leaflet";
 import { INITIAL_CENTER, INITIAL_ZOOM } from "./utils/mapConstants";
 
 function App() {
-  const [route, setRoute] = useState<[number, number][]>([]);
+  const [finalRoute, setFinalRoute] = useState<[number, number][]>([]);
+  const [animatedRoute, setAnimatedRoute] = useState<[number, number][]>([]);
   const [pathCities, setPathCities] = useState<string[]>([]);
+  const [visitedCities, setVisitedCities] = useState<string[]>([]);
+  const [queueCities, setQueueCities] = useState<string[]>([]);
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const mapRef = useRef<L.Map | null>(null);
 
-  const handleSearch = (origin: string, destination: string) => {
-    const path = findShortestPath(origin, destination);
+  const handleSearchAndAnimate = (origin: string, destination: string) => {
+    if (isAnimating) return;
 
-    if (path) {
-      const coordinates = pathToCoordinates(path);
-      setRoute(coordinates);
-      setPathCities(path);
-      console.log("Menor caminho encontrado:", path.join(" → "));
-    } else {
+    // Limpa tudo
+    setAnimatedRoute([]);
+    setFinalRoute([]);
+    setPathCities([]);
+    setVisitedCities([]);
+    setQueueCities([]);
+    setIsAnimating(true);
+
+    const result = findShortestPathWithTracing(origin, destination);
+    if (!result) {
       alert("Não há caminho entre essas cidades!");
-      setRoute([]);
-      setPathCities([]);
+      setIsAnimating(false);
+      return;
     }
+
+    const path = result.path;
+    const coords = result.coordinates;
+
+    let i = 0;
+    const visited = new Set<string>([origin]);
+
+    const animate = () => {
+      if (i >= path.length) {
+        setTimeout(() => {
+          setFinalRoute(coords);
+          setPathCities(path);
+          setIsAnimating(false);
+        }, 800);
+        return;
+      }
+
+      const currentCity = path[i];
+      visited.add(currentCity);
+
+      setVisitedCities(Array.from(visited));
+      setQueueCities([]); // opcional: pode simular fila real se quiser
+
+      // Desenha a linha crescendo
+      if (i > 0) {
+        setAnimatedRoute(coords.slice(0, i + 1));
+      }
+
+      i++;
+      setTimeout(animate, 900);
+    };
+
+    animate();
   };
 
   const handleResetView = () => {
-    if (mapRef.current) {
-      mapRef.current.flyTo(INITIAL_CENTER, INITIAL_ZOOM);
-    }
+    mapRef.current?.flyTo(INITIAL_CENTER, INITIAL_ZOOM, { duration: 1.5 });
   };
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-gray-100">
       <RouteMenu
-        onSearch={handleSearch}
+        onSearch={handleSearchAndAnimate}
         pathCities={pathCities}
+        visitedCities={visitedCities}
+        queueCities={queueCities}
+        isAnimating={isAnimating}
         onResetView={handleResetView}
       />
-      <Map route={route} ref={mapRef} />
+      <Map
+        route={finalRoute.length > 0 ? finalRoute : animatedRoute}
+        ref={mapRef}
+        visitedCities={visitedCities}
+        queueCities={queueCities}
+        pathCities={pathCities}
+        isAnimating={isAnimating}
+      />
     </div>
   );
 }

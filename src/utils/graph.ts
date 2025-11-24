@@ -1,66 +1,64 @@
 import { cities } from "./cities";
 import { routes } from "./routes";
 
-const coordToCity = new Map<string, string>();
-cities.forEach(city => {
-  coordToCity.set(city.coordenadas.join(","), city.name);
+const coordToCity: Record<string, string> = {};
+const cityToCoord: Record<string, [number, number]> = {};
+cities.forEach(c => {
+  coordToCity[c.coordenadas.join(",")] = c.name;
+  cityToCoord[c.name] = c.coordenadas;
 });
 
-const cityToCoord = new Map<string, [number, number]>();
-cities.forEach(city => {
-  cityToCoord.set(city.name, city.coordenadas);
-});
+export const graph: Record<string, string[]> = {};
+cities.forEach(c => graph[c.name] = []);
 
-export const graph = new Map<string, string[]>();
-
-cities.forEach(city => graph.set(city.name, []));
-
-routes.forEach(([coordA, coordB]) => {
-  const a = coordToCity.get(coordA.join(","));
-  const b = coordToCity.get(coordB.join(","));
-  if (a && b) {
-    graph.get(a)!.push(b);
-    graph.get(b)!.push(a);
+routes.forEach(([a, b]) => {
+  const A = coordToCity[a.join(",")];
+  const B = coordToCity[b.join(",")];
+  if (A && B) {
+    graph[A].push(B);
+    graph[B].push(A);
   }
 });
 
-// Função BFS para encontrar o menor caminho
-export function findShortestPath(start: string, end: string): string[] | null {
-  if (start === end) return [start];
+export interface BFSResult {
+  path: string[];
+  coordinates: [number, number][];
+}
 
-  const queue: string[] = [start];
-  const visited = new Set<string>();
-  const parent = new Map<string, string | null>();
+export function findShortestPathWithTracing(start: string, end: string): BFSResult | null {
+  if (start === end) {
+    return { path: [start], coordinates: [cityToCoord[start]] };
+  }
 
-  visited.add(start);
-  parent.set(start, null);
+  const queue = [start];
+  const visited = new Set<string>([start]);
+  const parent: Record<string, string> = { [start]: "" };
 
   while (queue.length > 0) {
-    const current = queue.shift()!;
+    const curr = queue.shift()!;
 
-    if (current === end) {
+    if (curr === end) {
       const path: string[] = [];
-      let node: string | null = current;
-      while (node !== null) {
+      let node: string = curr;
+      while (node !== "") {
         path.unshift(node);
-        node = parent.get(node)!;
+        node = parent[node];
       }
-      return path;
+      const coordinates = path.map(name => cityToCoord[name]);
+      return { path, coordinates };
     }
 
-    const neighbors = graph.get(current) || [];
-    for (const neighbor of neighbors) {
-      if (!visited.has(neighbor)) {
-        visited.add(neighbor);
-        parent.set(neighbor, current);
-        queue.push(neighbor);
+    for (const neigh of graph[curr] || []) {
+      if (!visited.has(neigh)) {
+        visited.add(neigh);
+        parent[neigh] = curr;
+        queue.push(neigh);
       }
     }
   }
-
-  return null; 
+  return null;
 }
 
 export function pathToCoordinates(path: string[]): [number, number][] {
-  return path.map(cityName => cityToCoord.get(cityName)!);
+  return path.map(n => cityToCoord[n]);
 }
