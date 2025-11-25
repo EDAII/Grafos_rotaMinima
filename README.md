@@ -2,7 +2,7 @@
 
 **Link do vídeo do Trabalho 4:**
 
-<!-- [Vídeo Trabalho 4 - EDAII]() Adicionar link -->
+[Vídeo Trabalho 4 - EDAII](https://youtu.be/-n9Zo4yZyaE)
 
 ## Alunos
 
