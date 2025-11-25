@@ -39,12 +39,10 @@ const Map = forwardRef<L.Map | null, MapProps>(
             attribution='&copy; OpenStreetMap contributors'
           />
 
-          {/* Rotas de fundo */}
           {routes.map((seg, i) => (
             <Polyline key={i} positions={seg} color="#374151" weight={3} opacity={0.25} />
           ))}
 
-          {/* Cidades com cores */}
           {cities.map(city => {
             const n = city.name;
             const isStart = pathCities[0] === n;
@@ -84,7 +82,6 @@ const Map = forwardRef<L.Map | null, MapProps>(
             );
           })}
 
-          {/* LINHA SENDO DESENHADA PROGRESSIVAMENTE */}
           {route.length > 1 && (
             <>
               <Polyline

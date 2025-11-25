@@ -5,8 +5,6 @@ import { MapPin, ArrowRight, RefreshCw } from "lucide-react";
 interface RouteMenuProps {
   onSearch: (origin: string, destination: string) => void;
   pathCities: string[];
-  visitedCities: string[];
-  queueCities: string[];
   isAnimating: boolean;
   onResetView: () => void;
 }
@@ -14,8 +12,6 @@ interface RouteMenuProps {
 export default function RouteMenu({
   onSearch,
   pathCities,
-  visitedCities,
-  queueCities,
   isAnimating,
   onResetView,
 }: RouteMenuProps) {
@@ -64,7 +60,6 @@ export default function RouteMenu({
           </select>
         </div>
 
-        {/* BOTÃO ÚNICO COM CURSOR DE MÃOZINHA */}
         <button
           onClick={() => onSearch(origin, destination)}
           disabled={!isValid || isAnimating}
@@ -80,7 +75,6 @@ export default function RouteMenu({
           <ArrowRight className="w-6 h-6" />
         </button>
 
-        {/* Rota encontrada */}
         {pathCities.length > 0 && !isAnimating && (
           <div className="mt-6 p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-2xl shadow-inner">
             <h3 className="text-xl font-bold text-green-800 mb-3">Rota Encontrada!</h3>

@@ -18,7 +18,6 @@ function App() {
   const handleSearchAndAnimate = (origin: string, destination: string) => {
     if (isAnimating) return;
 
-    // Limpa tudo
     setAnimatedRoute([]);
     setFinalRoute([]);
     setPathCities([]);
@@ -53,9 +52,8 @@ function App() {
       visited.add(currentCity);
 
       setVisitedCities(Array.from(visited));
-      setQueueCities([]); // opcional: pode simular fila real se quiser
+      setQueueCities([]);
 
-      // Desenha a linha crescendo
       if (i > 0) {
         setAnimatedRoute(coords.slice(0, i + 1));
       }
@@ -76,8 +74,6 @@ function App() {
       <RouteMenu
         onSearch={handleSearchAndAnimate}
         pathCities={pathCities}
-        visitedCities={visitedCities}
-        queueCities={queueCities}
         isAnimating={isAnimating}
         onResetView={handleResetView}
       />
